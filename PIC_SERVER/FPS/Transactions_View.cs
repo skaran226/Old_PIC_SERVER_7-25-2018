@@ -434,7 +434,7 @@ namespace FPS
 
             string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
 
-            MessageBox.Show(dtformat + "");
+           // MessageBox.Show(dtformat + "");
 
             previous_btn.Visible = false;
 
