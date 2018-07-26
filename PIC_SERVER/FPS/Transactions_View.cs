@@ -427,19 +427,19 @@ namespace FPS
 
         private void Transactions_View_Load(object sender, EventArgs e)
         {
-            var dateAndTime = DateTime.Now;
+           /* var dateAndTime = DateTime.Now;
             int yearint = dateAndTime.Year;
             int monthint = dateAndTime.Month;
             int dayint = dateAndTime.Day;
 
-            string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
+            string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);*/
 
            // MessageBox.Show(dtformat + "");
 
             previous_btn.Visible = false;
 
 
-            UpdateCompletedTransView(dtformat);
+            UpdateCompletedTransView();
 
 
             if (month_year_lbl.Text.ToString().Split(',')[0] == "Jan") {
@@ -515,7 +515,7 @@ namespace FPS
 
         int iCount;
 
-        public void UpdateCompletedTransView(string datetimeformate)
+        public void UpdateCompletedTransView()
         {
             int iIndex;
             string sQuery;
@@ -537,7 +537,7 @@ namespace FPS
 
             //sQuery = "SELECT COMPLETED_TIME, PIC, PUMP, DEPOSIT, PURCHASE, PRICE, CHANGE, GRADE, VOLUME, SHOW_TIME, TRAN_ID FROM TRANSACTIONS ORDER BY COMPLETED_TIME DESC";
 
-            sQuery = "SELECT COMPLETED_TIME, PIC, PUMP, DEPOSIT, PURCHASE, PRICE, GRADE, VOLUME, SHOW_TIME, TRAN_ID,CHANGE FROM TRANSACTIONS WHERE SHOW_TIME LIKE '%" + datetimeformate + "%' ORDER BY COMPLETED_TIME DESC;";
+            sQuery = "SELECT COMPLETED_TIME, PIC, PUMP, DEPOSIT, PURCHASE, PRICE, GRADE, VOLUME, SHOW_TIME, TRAN_ID,CHANGE FROM TRANSACTIONS ORDER BY COMPLETED_TIME DESC;";
             dbCmd = SQL_SERVER.Set_Sql_Server_Cmd(sQuery);
 
             drRecordSet = dbCmd.ExecuteReader();
