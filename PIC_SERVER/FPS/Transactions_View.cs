@@ -869,7 +869,7 @@ namespace FPS
 
             }
             else {
-                Display.ShowMessageBox("Not Available This date Transations Showing All Available Transactions", 6);
+                Display.ShowMessageBox("Not Available Selected date Transations \n Showing All Available Transactions", 6);
             }
             dbCmd.Dispose();
             drRecordSet.Dispose();
