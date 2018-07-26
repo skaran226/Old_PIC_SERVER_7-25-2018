@@ -18,15 +18,18 @@ namespace FPS
 {
     public partial class Transactions_View : Form
     {
+        public static Transactions_View tv;
         public Transactions_View()
         {
+            tv = this;
             InitializeComponent();
 
         }
 
         int PassIndex;//send data for print
-        
 
+      
+         
 
         string date_formate = "";
 
@@ -425,7 +428,7 @@ namespace FPS
 
 
 
-
+        
         public static void SetButtonText(Button btn, string lbl)
         {
 
@@ -482,8 +485,9 @@ namespace FPS
 
             
         }
+       
 
-        public void Update_Transactions_ButtonText(int index, string lbl)
+        public static void Update_Transactions_ButtonText(int index, string lbl)
         {
 
 
@@ -491,39 +495,39 @@ namespace FPS
             if (index == 1)
             {
 
-                Transactions_View.SetButtonText(One, lbl);
+                Transactions_View.SetButtonText(tv.One, lbl);
             }
 
             if (index == 2)
             {
-                Transactions_View.SetButtonText(Two, lbl);
+                Transactions_View.SetButtonText(tv.Two, lbl);
             }
 
             if (index == 3)
             {
-                Transactions_View.SetButtonText(Three, lbl);
+                Transactions_View.SetButtonText(tv.Three, lbl);
             }
 
             if (index == 4)
             {
-                Transactions_View.SetButtonText(Four, lbl);
+                Transactions_View.SetButtonText(tv.Four, lbl);
             }
 
             if (index == 5)
             {
-                Transactions_View.SetButtonText(Five, lbl);
+                Transactions_View.SetButtonText(tv.Five, lbl);
             }
 
             if (index == 6)
             {
-                Transactions_View.SetButtonText(Six, lbl);
+                Transactions_View.SetButtonText(tv.Six, lbl);
             }
         }
 
 
-        int iCount;
+        public static int iCount;
 
-        public void UpdateCompletedTransView()
+        public static void UpdateCompletedTransView()
         {
             int iIndex;
             string sQuery;
@@ -576,7 +580,8 @@ namespace FPS
             {
                 if (iIndex < iCount)
                 {
-                    Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + DB.lCompletedTrans[iIndex].sPump + " @ " + DB.lCompletedTrans[iIndex].sShowTime + " PAID: $" + DB.lCompletedTrans[iIndex].sDeposit + "  \nCHANGE: $" + DB.lCompletedTrans[iIndex].sChange);
+                    tv.pump_no.Text = DB.lCompletedTrans[iIndex].sPump.ToString();
+                   Transactions_View.Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + DB.lCompletedTrans[iIndex].sPump + " @ " + DB.lCompletedTrans[iIndex].sShowTime + " PAID: $" + DB.lCompletedTrans[iIndex].sDeposit + "  \nCHANGE: $" + DB.lCompletedTrans[iIndex].sChange);
                 }
             }
             dbCmd.Dispose();
