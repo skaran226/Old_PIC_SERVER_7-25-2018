@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO.Ports;
@@ -24,7 +24,7 @@ namespace FPS
 
         }
 
-
+        int PassIndex;//send data for print
         public static List<DB.TransStruct> lCompletedTrans = new List<DB.TransStruct>();
 
 
@@ -292,7 +292,7 @@ namespace FPS
 
         private void print_transaction_Click(object sender, EventArgs e)
         {
-
+            //DB.PrintEodReport(PassIndex);
         }
 
         private void go_back_Click(object sender, EventArgs e)
@@ -430,11 +430,11 @@ namespace FPS
            /* var dateAndTime = DateTime.Now;
             int yearint = dateAndTime.Year;
             int monthint = dateAndTime.Month;
-            int dayint = dateAndTime.Day;
+            int dayint = dateAndTime.Day;*/
 
-            string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);*/
+            //string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
 
-           // MessageBox.Show(dtformat + "");
+            //MessageBox.Show(dtformat + "");
 
             previous_btn.Visible = false;
 
@@ -568,7 +568,7 @@ namespace FPS
             {
                 if (iIndex < iCount)
                 {
-                    Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + "PAID: $" + lCompletedTrans[iIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iIndex].sChange);
+                    Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + " PAID: $" + lCompletedTrans[iIndex].sDeposit + "  \nCHANGE: $" + lCompletedTrans[iIndex].sChange);
                 }
             }
             dbCmd.Dispose();
@@ -841,7 +841,7 @@ namespace FPS
                 {
                     if (iIndex < iCount)
                     {
-                        Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + "PAID: $" + lCompletedTrans[iIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iIndex].sChange);
+                        Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + " PAID: $" + lCompletedTrans[iIndex].sDeposit + "\nCHANGE: $" + lCompletedTrans[iIndex].sChange);
                     }
                 }
 
@@ -861,13 +861,15 @@ namespace FPS
 
             }
             else {
-                Display.ShowMessageBox("No data Available", 3);
+                Display.ShowMessageBox("Not Available This date Transations Showing All Available Transactions", 6);
             }
             dbCmd.Dispose();
             drRecordSet.Dispose();
             SQL_SERVER.Close_Sql_Sever_Conn();
 
         }
+
+        
 
     }
 }
