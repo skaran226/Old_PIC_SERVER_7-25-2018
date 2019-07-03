@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO.Ports;
@@ -24,8 +24,8 @@ namespace FPS
 
         }
 
-
-        public static List<DB.TransStruct> lCompletedTrans = new List<DB.TransStruct>();
+        int PassIndex;//send data for print
+        
 
 
         string date_formate = "";
@@ -223,10 +223,10 @@ namespace FPS
             iButtonIndex = 0;
             for (iTranIndex = (6 * (iPage - 1)); iTranIndex < (6 * iPage); iTranIndex++)
             {
-                if (iTranIndex < lCompletedTrans.Count)
+                if (iTranIndex < DB.lCompletedTrans.Count)
                 {
                     iButtonIndex++;
-                    Update_Transactions_ButtonText(iButtonIndex, "PUMP: " + lCompletedTrans[iTranIndex].sPump + " @ " + lCompletedTrans[iTranIndex].sShowTime + "\nPAID: $" + lCompletedTrans[iTranIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iTranIndex].sChange);
+                    Update_Transactions_ButtonText(iButtonIndex, "PUMP: " + DB.lCompletedTrans[iTranIndex].sPump + " @ " + DB.lCompletedTrans[iTranIndex].sShowTime + "\nPAID: $" + DB.lCompletedTrans[iTranIndex].sDeposit + "  CHANGE: $" + DB.lCompletedTrans[iTranIndex].sChange);
                 }
             }
 
@@ -237,7 +237,7 @@ namespace FPS
                 ButtonVisibility(previous_btn, false);
             }
 
-            if (lCompletedTrans.Count >= 6 * iPage)
+            if (DB.lCompletedTrans.Count >= 6 * iPage)
             {
 
                 ButtonVisibility(next_btn, true);
@@ -263,15 +263,15 @@ namespace FPS
             iButtonIndex = 0;
             for (iTranIndex = (6 * (iPage - 1)); iTranIndex < (6 * iPage); iTranIndex++)
             {
-                if (iTranIndex < lCompletedTrans.Count)
+                if (iTranIndex < DB.lCompletedTrans.Count)
                 {
                     iButtonIndex++;
 
-                    Update_Transactions_ButtonText(iButtonIndex, "PUMP: " + lCompletedTrans[iTranIndex].sPump + " @ " + lCompletedTrans[iTranIndex].sShowTime + "\nPAID: $" + lCompletedTrans[iTranIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iTranIndex].sChange);
+                    Update_Transactions_ButtonText(iButtonIndex, "PUMP: " + DB.lCompletedTrans[iTranIndex].sPump + " @ " + DB.lCompletedTrans[iTranIndex].sShowTime + "\nPAID: $" + DB.lCompletedTrans[iTranIndex].sDeposit + "  CHANGE: $" + DB.lCompletedTrans[iTranIndex].sChange);
                 }
             }
 
-            if (lCompletedTrans.Count <= 6 * iPage)
+            if (DB.lCompletedTrans.Count <= 6 * iPage)
             {
                 
                 ButtonVisibility(next_btn, false);
@@ -292,7 +292,7 @@ namespace FPS
 
         private void print_transaction_Click(object sender, EventArgs e)
         {
-
+            DB.PrintReceipt(PassIndex-1);
         }
 
         private void go_back_Click(object sender, EventArgs e)
@@ -304,9 +304,10 @@ namespace FPS
         {
             if (One.Text.Trim() != "")
             {
-
-                SetButton(1);
+                PassIndex = 1;
+                SetButton(PassIndex);
                 SetTransactionsDetails(1);
+                
             }
         }
 
@@ -314,9 +315,11 @@ namespace FPS
         {
             if (Two.Text.Trim() != "")
             {
-
-                SetButton(2);
+                PassIndex = 2;
+                SetButton(PassIndex);
                 SetTransactionsDetails(2);
+                
+
             }
         }
 
@@ -325,7 +328,8 @@ namespace FPS
             if (Three.Text.Trim() != "")
             {
 
-                SetButton(3);
+                PassIndex = 3;
+                SetButton(PassIndex);
                 SetTransactionsDetails(3);
             }
         }
@@ -335,7 +339,8 @@ namespace FPS
             if (Four.Text.Trim() != "")
             {
 
-                SetButton(4);
+                PassIndex = 4;
+                SetButton(PassIndex);
                 SetTransactionsDetails(4);
             }
         }
@@ -345,7 +350,8 @@ namespace FPS
             if (Five.Text.Trim() != "")
             {
 
-                SetButton(5);
+                PassIndex = 5;
+                SetButton(PassIndex);
                 SetTransactionsDetails(5);
             }
         }
@@ -355,7 +361,8 @@ namespace FPS
             if (Six.Text.Trim() != "")
             {
 
-                SetButton(6);
+                PassIndex = 6;
+                SetButton(PassIndex);
                 SetTransactionsDetails(6);
             }
         }
@@ -430,16 +437,17 @@ namespace FPS
            /* var dateAndTime = DateTime.Now;
             int yearint = dateAndTime.Year;
             int monthint = dateAndTime.Month;
-            int dayint = dateAndTime.Day;
+            int dayint = dateAndTime.Day;*/
 
-            string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);*/
+            //string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
 
-           // MessageBox.Show(dtformat + "");
+            //MessageBox.Show(dtformat + "");
 
             previous_btn.Visible = false;
 
 
             UpdateCompletedTransView();
+           
 
 
             if (month_year_lbl.Text.ToString().Split(',')[0] == "Jan") {
@@ -466,7 +474,7 @@ namespace FPS
 
 
 
-           /* if (lCompletedTrans.Count <= 6 * iPage)
+           /* if (DB.lCompletedTrans.Count <= 6 * iPage)
             {
 
                 ButtonVisibility(next_btn, false);
@@ -546,7 +554,7 @@ namespace FPS
             Debug.WriteLine(drRecordSet.HasRows);
 
             iCount = 0;
-            lCompletedTrans.Clear();
+            DB.lCompletedTrans.Clear();
             while (drRecordSet.Read())
             {
                 myTransStruct.sPIC = drRecordSet["PIC"].ToString();
@@ -560,7 +568,7 @@ namespace FPS
                 myTransStruct.sShowTime = drRecordSet["SHOW_TIME"].ToString();
                 myTransStruct.sTranId = drRecordSet["TRAN_ID"].ToString();
 
-                lCompletedTrans.Add(myTransStruct);
+                DB.lCompletedTrans.Add(myTransStruct);
                 iCount++;
             }
 
@@ -568,7 +576,7 @@ namespace FPS
             {
                 if (iIndex < iCount)
                 {
-                    Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + "PAID: $" + lCompletedTrans[iIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iIndex].sChange);
+                    Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + DB.lCompletedTrans[iIndex].sPump + " @ " + DB.lCompletedTrans[iIndex].sShowTime + " PAID: $" + DB.lCompletedTrans[iIndex].sDeposit + "  \nCHANGE: $" + DB.lCompletedTrans[iIndex].sChange);
                 }
             }
             dbCmd.Dispose();
@@ -579,12 +587,12 @@ namespace FPS
 
         private void SetTransactionsDetails(int index)
         {
-            pump_no.Text = lCompletedTrans[index - 1].sPump;
-            deposit.Text = lCompletedTrans[index - 1].sDeposit;
-            change.Text = lCompletedTrans[index - 1].sChange;
-            total.Text = lCompletedTrans[index - 1].sPurchase;
-            date_time.Text = lCompletedTrans[index - 1].sShowTime;
-            gal.Text = lCompletedTrans[index - 1].sVolume;
+            pump_no.Text = DB.lCompletedTrans[index - 1].sPump;
+            deposit.Text = DB.lCompletedTrans[index - 1].sDeposit;
+            change.Text = DB.lCompletedTrans[index - 1].sChange;
+            total.Text = DB.lCompletedTrans[index - 1].sPurchase;
+            date_time.Text = DB.lCompletedTrans[index - 1].sShowTime;
+            gal.Text = DB.lCompletedTrans[index - 1].sVolume;
         }
 
 
@@ -815,7 +823,7 @@ namespace FPS
             if (drRecordSet.HasRows)
             {
                 iCount = 0;
-                lCompletedTrans.Clear();
+                DB.lCompletedTrans.Clear();
                 ClearButtonTexts();
                 ClearSelection();
                 ClearTransactionsDetails();
@@ -833,7 +841,7 @@ namespace FPS
                     myTransStruct.sShowTime = drRecordSet["SHOW_TIME"].ToString();
                     myTransStruct.sTranId = drRecordSet["TRAN_ID"].ToString();
 
-                    lCompletedTrans.Add(myTransStruct);
+                    DB.lCompletedTrans.Add(myTransStruct);
                     iCount++;
                 }
 
@@ -841,19 +849,19 @@ namespace FPS
                 {
                     if (iIndex < iCount)
                     {
-                        Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + lCompletedTrans[iIndex].sPump + " @ " + lCompletedTrans[iIndex].sShowTime + "PAID: $" + lCompletedTrans[iIndex].sDeposit + "  CHANGE: $" + lCompletedTrans[iIndex].sChange);
+                        Update_Transactions_ButtonText(iIndex + 1, "PUMP: " + DB.lCompletedTrans[iIndex].sPump + " @ " + DB.lCompletedTrans[iIndex].sShowTime + " PAID: $" + DB.lCompletedTrans[iIndex].sDeposit + "\nCHANGE: $" + DB.lCompletedTrans[iIndex].sChange);
                     }
                 }
 
 
                 iPage = 1;
 
-                if (lCompletedTrans.Count <= 6 * iPage)
+                if (DB.lCompletedTrans.Count <= 6 * iPage)
                 {
 
                     ButtonVisibility(next_btn, false);
                 }
-                if (lCompletedTrans.Count >= 6 * iPage)
+                if (DB.lCompletedTrans.Count >= 6 * iPage)
                 {
 
                     ButtonVisibility(next_btn, true);
@@ -861,7 +869,7 @@ namespace FPS
 
             }
             else {
-                Display.ShowMessageBox("No data Available", 3);
+                Display.ShowMessageBox("Not Available Selected date Transations \n Showing All Available Transactions", 6);
             }
             dbCmd.Dispose();
             drRecordSet.Dispose();
@@ -869,5 +877,13 @@ namespace FPS
 
         }
 
+
+
+   
+        }
     }
-}
+
+        
+
+    
+
